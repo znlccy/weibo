@@ -126,6 +126,7 @@
 
             //JS验证
             $.post("ajaxRegister.php",{username: username, password: password}, function (data) {
+                layer.msg(data);
                 if (data == -1) {
                     layer.msg('用户名已存在');
                     return false;

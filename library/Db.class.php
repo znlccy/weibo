@@ -154,8 +154,9 @@ class DB {
     /**
      * 实现数据库查询
      * @param unknown $query
-     * @param null $param
+     * @param null $params
      * @param int $ferchmode
+     * @return null
      */
     public function query($query, $params = null, $ferchmode = PDO::FETCH_ASSOC) {
         $query = trim(str_replace("\r", " ", $query));
