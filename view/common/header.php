@@ -3,6 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <title>ZC微博</title>
+
+    <!-- 设置浏览器左上角图标 -->
+    <link rel="icon" type="image/x-icon" href="public/ico/weibo.ico" />
+
     <!-- 引入外部css文件 -->
     <link rel="stylesheet" type="text/css" href="public/css/semantic.css" />
     <link rel="stylesheet" type="text/css" href="public/css/main.css" />
