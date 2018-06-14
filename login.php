@@ -10,7 +10,7 @@
     <!-- 引入css样式文件 -->
     <link rel="stylesheet" type="text/css" href="public/css/semantic.css" />
     <link rel="stylesheet" type="text/css" href="public/css/login.css" />
-    <link rel="stylesheet" type="text/css" href="public/css/layer.css" />
+    <link rel="stylesheet" type="text/css" href="public/static/layer/theme/default/layer.css" />
     <!-- 引入外部js -->
     <script type="text/javascript" src="public/js/jquery-3.3.1.js"></script>
     <script type="text/javascript" src="public/static/layer/layer.js"></script>
@@ -103,6 +103,11 @@
 
             if (password == '') {
                 layer.msg('请填写密码');                     //layer弹层插件提示信息
+                return false;
+            }
+
+            if (password.length >= 7) {
+                layer.msg('密码长度超过6位');                //layer弹层插件提示信息
                 return false;
             }
 

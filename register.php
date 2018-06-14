@@ -10,7 +10,7 @@
     <!-- 引入外部css层叠样式表 -->
     <link rel="stylesheet" type="text/css" href="public/css/semantic.css" />
     <link rel="stylesheet" type="text/css" href="public/css/register.css" />
-    <link rel="stylesheet" type="text/css" href="public/css/layer.css" />
+    <link rel="stylesheet" type="text/css" href="public/static/layer/theme/default/layer.css" />
 
     <!-- 引入外部js文件 -->
     <script type="text/javascript" src="public/js/jquery-3.3.1.js"></script>

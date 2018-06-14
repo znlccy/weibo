@@ -1,7 +1,10 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/6/13
- * Time: 13:13
- */
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+</head>
+<body>
+    微博首页
+</body>
+</html>

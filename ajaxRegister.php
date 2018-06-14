@@ -4,12 +4,12 @@
  * User: Administrator
  * Date: 2018/6/13
  * Time: 18:41
+ * Comment: 异步提交注册功能
  */
     require ('library/Db.class.php');       //连接数据库
     $username = $_POST['username'];          //获取用户名
     $password = $_POST['password'];          //获取密码
 
-    echo 1;
     //判断用户名是否存在
     $db = new DB();
     $sql = "select username from zc_user where username = :username";
@@ -31,3 +31,4 @@
     } else {
         echo 0;
     }
+?>

@@ -1,107 +1,118 @@
 <?php
 /**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2018/6/13
- * Time: 13:02
+ *  DB - A simple database class
+ *
+ * @author		Author: Adminstrator
+ * @git 		https://github.com/znlccy/weibo
+ * @version    v1.0.0
+ *
  */
-require ("connect/config.php");
-require ("Log.class.php");
-
-class DB {
-
-    /**
-     * 声明PDO对象
-     */
+require("connect/config.php");
+require("Log.class.php");
+class DB
+{
+    # @object, The PDO object
     private $pdo;
 
-    /**
-     * 声明sql声明语句
-     */
+    # @object, PDO statement object
     private $sQuery;
 
-    /**
-     * 声明数据库设置
-     */
+    # @array,  The database settings
     private $settings;
 
-    /**
-     * 声明是否连接数据库
-     */
+    # @bool ,  Connected to the database
     private $bConnected = false;
 
-    /**
-     * 声明数据库异常日志
-     */
+    # @object, Object for logging exceptions
     private $log;
 
-    /**
-     * 声明SQL语句参数
-     */
+    # @array, The parameters of the SQL query
     private $parameters;
 
     /**
-     * DB constructor.
-     * 声明默认构造函数
-     * 1.初始化日志类
-     * 2.连接数据库
-     * 3.创建参数数组
+     *   Default Constructor
+     *
+     *	1. Instantiate Log class.
+     *	2. Connect to database.
+     *	3. Creates the parameter array.
      */
-    public function __construct(){
+    public function __construct()
+    {
         $this->log = new Log();
-        $this->Contect();
+        $this->Connect();
         $this->parameters = array();
     }
 
     /**
-     * 连接数据库
+     *	This method makes connection to the database.
+     *
+     *	1. Set the database params.
+     *	2. Puts  the ini content into the settings array.
+     *	3. Tries to connect to the database.
+     *	4. If connection failed, exception is displayed and a log file gets created.
      */
-    private function Contect() {
-        $dsn = 'mysql:dbname='. DBName . ';host=' . DBHost . '';
-
+    private function Connect()
+    {
+        $dsn  = 'mysql:dbname=' . DBName . ';host=' . DBHost . '';
         try {
+            # Read settings from INI file, set UTF8
             $this->pdo = new PDO($dsn, DBUser, DBPassword, array(
                 PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8"
-            ));//记录任何异常日志
-            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);//记录任何SQL声明语句错误日志
-            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);//设置连接状态为true
+            ));
+
+            # We can now log any exceptions on Fatal error.
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+            # Disable emulation of prepared statements, use REAL prepared statements instead.
+            $this->pdo->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+
+            # Connection succeeded, set the boolean to true.
             $this->bConnected = true;
-        } catch (PDOException $e) {
+        }
+        catch (PDOException $e) {
+            # Write into log
             echo $this->ExceptionLog($e->getMessage());
             die();
         }
     }
-
-    /**
-     * 关闭数据库连接
-     * @return mixed
+    /*
+     *   You can use this little method if you want to close the PDO connection
+     *
      */
     public function CloseConnection()
     {
+        # Set the PDO object to null to close the connection
+        # http://www.php.net/manual/en/pdo.connections.php
         $this->pdo = null;
     }
 
     /**
-     * 初始化函数
-     * @param unknown $query
-     * @param string $parameters
+     *	Every method which needs to execute a SQL query uses this method.
+     *
+     *	1. If not connected, connect to the database.
+     *	2. Prepare Query.
+     *	3. Parameterize Query.
+     *	4. Execute Query.
+     *	5. On exception : Write Exception into the log + SQL query.
+     *	6. Reset the Parameters.
      */
-    private function Init($query, $parameters = "") {
-        //连接数据库
+    private function Init($query, $parameters = "")
+    {
+        # Connect to database
         if (!$this->bConnected) {
-            $this->Contect();
+            $this->Connect();
         }
-
         try {
-            // Prepare query
+            # Prepare query
             $this->sQuery = $this->pdo->prepare($query);
 
-            //添加更多参数到参数数组里
+            # Add parameters to the parameter array
             $this->bindMore($parameters);
 
-            //绑定参数
+            # Bind parameters
             if (!empty($this->parameters)) {
-                foreach ($this->$parameters as $param => $value) {
+                foreach ($this->parameters as $param => $value) {
+
                     $type = PDO::PARAM_STR;
                     switch ($value[1]) {
                         case is_int($value[1]):
@@ -114,108 +125,125 @@ class DB {
                             $type = PDO::PARAM_NULL;
                             break;
                     }
-                    $this->sQuery->bindValue($value[0],$value[1], $type);
+                    // Add type when binding the values to the column
+                    $this->sQuery->bindValue($value[0], $value[1], $type);
                 }
             }
 
-            //执行SQL语句
+            # Execute SQL
             $this->sQuery->execute();
-
-        } catch (PDOException $e) {
+        }
+        catch (PDOException $e) {
+            # Write into log and display Exception
             echo $this->ExceptionLog($e->getMessage(), $query);
             die();
         }
 
-        //重置参数
+        # Reset the parameters
         $this->parameters = array();
     }
 
     /**
-     * @param unknown $para
-     * @param unknown $value
+     *	@void
+     *
+     *	Add the parameter to the parameter array
+     *	@param string $para
+     *	@param string $value
      */
-    public function bind($para, $value) {
-        $this->parameters[sizeof($this->parameters)] = [":" . $para, $value];
+    public function bind($para, $value)
+    {
+        $this->parameters[sizeof($this->parameters)] = [":" . $para , $value];
     }
-
     /**
-     * 绑定更多的参数到参数数组中
-     * @param unknown $parray
+     *	@void
+     *
+     *	Add more parameters to the parameter array
+     *	@param array $parray
      */
-    public function bindMore($parray) {
+    public function bindMore($parray)
+    {
         if (empty($this->parameters) && is_array($parray)) {
             $columns = array_keys($parray);
-            foreach ($columns as $i => $column) {
+            foreach ($columns as $i => &$column) {
                 $this->bind($column, $parray[$column]);
             }
         }
     }
-
     /**
-     * 实现数据库查询
-     * @param unknown $query
-     * @param null $params
-     * @param int $ferchmode
-     * @return null
+     *  If the SQL query  contains a SELECT or SHOW statement it returns an array containing all of the result set row
+     *	If the SQL statement is a DELETE, INSERT, or UPDATE statement it returns the number of affected rows
+     *
+     *   	@param  string $query
+     *	@param  array  $params
+     *	@param  int    $fetchmode
+     *	@return mixed
      */
-    public function query($query, $params = null, $ferchmode = PDO::FETCH_ASSOC) {
+    public function query($query, $params = null, $fetchmode = PDO::FETCH_ASSOC)
+    {
         $query = trim(str_replace("\r", " ", $query));
+
         $this->Init($query, $params);
+
         $rawStatement = explode(" ", preg_replace("/\s+|\t+|\n+/", " ", $query));
 
-        //哪一句SQL语句被执行
+        # Which SQL statement is used
         $statement = strtolower($rawStatement[0]);
 
         if ($statement === 'select' || $statement === 'show') {
-            return $this->sQuery->fetchAll($ferchmode);
+            return $this->sQuery->fetchAll($fetchmode);
         } elseif ($statement === 'insert' || $statement === 'update' || $statement === 'delete') {
             return $this->sQuery->rowCount();
         } else {
-            return null;
+            return NULL;
         }
-
     }
 
     /**
-     * 实现返回最新一次插入数据的主键
-     * @return mixed
+     *  Returns the last inserted id.
+     *  @return string
      */
-    public function lastInsertId() {
+    public function lastInsertId()
+    {
         return $this->pdo->lastInsertId();
     }
 
     /**
-     * 实现开始事务
-     * @return mixed
+     * Starts the transaction
+     * @return boolean, true on success or false on failure
      */
-    public function beginTransaction() {
+    public function beginTransaction()
+    {
         return $this->pdo->beginTransaction();
     }
 
     /**
-     * 实现执行事务
-     * @return mixed
+     *  Execute Transaction
+     *  @return boolean, true on success or false on failure
      */
-    public function executeTransaction() {
+    public function executeTransaction()
+    {
         return $this->pdo->commit();
     }
 
     /**
-     * 实现事务回滚
-     * @return mixed
+     *  Rollback of Transaction
+     *  @return boolean, true on success or false on failure
      */
-    public function rollBack() {
+    public function rollBack()
+    {
         return $this->pdo->rollBack();
     }
 
     /**
-     * 实现查询结果集中的列
-     * @param unknown $query
-     * @param null $param
-     * @return array|null
+     *	Returns an array which represents a column from the result set
+     *
+     *	@param  string $query
+     *	@param  array  $params
+     *	@return array
      */
-    public function column($query, $param = null) {
-        $this->Init($query, $param);
+    public function column($query, $params = null)
+    {
+        $this->Init($query, $params);
         $Columns = $this->sQuery->fetchAll(PDO::FETCH_NUM);
 
         $column = null;
@@ -225,52 +253,58 @@ class DB {
         }
 
         return $column;
-    }
 
+    }
     /**
-     * 实现查询结果集中的行
-     * @param unknown $query
-     * @param null $params
-     * @param int $fetchmode
-     * @return mixed
+     *	Returns an array which represents a row from the result set
+     *
+     *	@param  string $query
+     *	@param  array  $params
+     *  @param  int    $fetchmode
+     *	@return array
      */
-    public function row($query, $params = null, $fetchmode = PDO::FETCH_ASSOC ) {
+    public function row($query, $params = null, $fetchmode = PDO::FETCH_ASSOC)
+    {
         $this->Init($query, $params);
         $result = $this->sQuery->fetch($fetchmode);
-        $this->sQuery->closeCursor();
+        $this->sQuery->closeCursor(); // Frees up the connection to the server so that other SQL statements may be issued,
         return $result;
     }
-
     /**
-     * 实现查询单列
-     * @param unknown $query
-     * @param null $params
-     * @return mixed
+     *	Returns the value of one single field/column
+     *
+     *	@param  string $query
+     *	@param  array  $params
+     *	@return string
      */
-    public function single($query, $params = null) {
+    public function single($query, $params = null)
+    {
         $this->Init($query, $params);
         $result = $this->sQuery->fetchColumn();
-        $this->sQuery->closeCursor();
+        $this->sQuery->closeCursor(); // Frees up the connection to the server so that other SQL statements may be issued
         return $result;
     }
-
     /**
-     * 异常日志
-     * @param unknown $message
-     * @param string $sql
+     * Writes the log and returns the exception
+     *
+     * @param  string $message
+     * @param  string $sql
      * @return string
      */
-    private function ExceptionLog($message, $sql = "") {
-        $exception  = 'Unhandled Exception.<br />';
+    private function ExceptionLog($message, $sql = "")
+    {
+        $exception = 'Unhandled Exception. <br />';
         $exception .= $message;
         $exception .= "<br /> You can find the error back in the log.";
 
         if (!empty($sql)) {
+            # Add the Raw SQL to the Log
             $message .= "\r\nRaw SQL : " . $sql;
         }
-
+        # Write into log
         $this->log->write($message);
+
         return $exception;
     }
-
 }
+?>
