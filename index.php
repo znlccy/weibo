@@ -1,10 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>首页</title>
-</head>
-<body>
-    微博首页
-</body>
-</html>
+<?php
+    require ("library/Db.class.php");       //连接数据库
+    require ("library/function.php");       //自定义函数
+    require ("library/Page.class.php");     //分页类
+
+    is_login();                             //判断用户是否登录
+    $db = new DB();                         //创建数据库实例
+    
+?>

@@ -50,4 +50,18 @@
     function is_collect($post_id) {
 
     }
+
+    /**
+     * 获取头像
+     * @param $avatar
+     * @return string
+     */
+    function get_cover_path($avatar) {
+        if ($avatar) {
+            $path = 'public/images/upload/head_image/'.$avatar;
+        } else {
+            $path = 'public/images/avatar.jpg';
+        }
+        return $path;
+    }
 ?>
