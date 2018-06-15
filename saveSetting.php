@@ -21,9 +21,9 @@
 
     if ($update != false) {
         echo "<head><meta charset='UTF-8'></head>";
-        echo "<script>layer.msg('保存成功'); window.location.href='setting.php';</script>";
+        echo "<script>alert('保存成功'); window.location.href='setting.php';</script>";
     } else {
         echo "<head><meta charset='UTF-8'></head>";
-        echo "<script>layer.msg('保存失败'); window.location.href='setting.php';</script>";
+        echo "<script>alert('保存失败'); window.location.href='setting.php';</script>";
     }
-
+?>

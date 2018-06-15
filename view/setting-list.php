@@ -1,6 +1,10 @@
 <!-- 引入头部 -->
 <?php include ("view/common/header.php"); ?>
 
+<!-- 引入美图秀秀 -->
+<script src="http://open.web.meitu.com/sources/xiuxiu.js" type="text/javascript"></script>
+<script type="text/javascript" src="public/js/meitu.js"></script>
+
 <!-- 引入导航 -->
 <?php include ("view/common/head.php"); ?>
 <body>
@@ -39,7 +43,7 @@
     <div class="main">
         <div class="left setting-head">
             <!-- Tab选项卡 -->
-            <div class="ui top attached tabular menu new_menu">
+            <div style="font-size: 15px;" class="ui top attached tabular menu new_menu">
                 <a class="item active" data-tab="first">头像设置</a>
                 <a class="item" data-tab="second">资料设置</a>
                 <a class="item" data-tab="third">更改密码</a>
@@ -56,16 +60,16 @@
             <div class="ui bottom attached tab segment segment_new" data-tab="second">
                 <form class="ui form" method="post" action="saveSetting.php">
                     <div class="field">
-                        <label>用户名</label>
-                        <input type="text" value="<?php echo $user['username'] ?>" readonly>
+                        <label style="font-size: 14px">用户名</label>
+                        <input style="font-size: 13px" type="text" value="<?php echo $user['username'] ?>" readonly>
                     </div>
                     <div class="field">
-                        <label>注册日期</label>
-                        <input type="text" value="<?php echo date('Y-m-d', $user['addtime']) ?>">
+                        <label style="font-size: 14px">注册日期</label>
+                        <input style="font-size: 13px" type="text" value="<?php echo date('Y-m-d', $user['addtime']) ?>" readonly>
                     </div>
                     <div class="field">
-                        <label>性别</label>
-                        <select name="sex" class="ui fluid dropdown">
+                        <label style="font-size: 14px">性别</label>
+                        <select name="sex" style="font-size: 13px"  class="ui fluid dropdown">
                             <option value="0" <?php if ($user['sex']==0){ echo 'selected';} ?>>
                                 保密
                             </option>
@@ -78,14 +82,14 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label>qq号</label>
-                        <input type="text" name="qq" value="<?php echo $user['qq'] ?>">
+                        <label style="font-size: 14px">QQ</label>
+                        <input style="font-size: 13px" type="text" name="qq" value="<?php echo $user['qq'] ?>">
                     </div>
                     <div class="field">
-                        <label>邮箱</label>
-                        <input type="text" name="email" value="<?php echo $user['email'] ?>">
+                        <label style="font-size: 14px">邮箱</label>
+                        <input style="font-size: 13px" type="text" name="email" value="<?php echo $user['email'] ?>">
                     </div>
-                    <button class="ui teal button" type="submit">提交</button>
+                    <button class="ui teal button" style="font-size: 15px" type="submit">提交</button>
                 </form>
             </div>
             <!-- 更改密码选项 -->
@@ -93,18 +97,18 @@
                 <form action="changePassword" method="post">
                     <div class="ui form">
                         <div class="required field">
-                            <label>原始密码</label>
-                            <input type="password" name="old_password" id="old_password" />
+                            <label style="font-size: 14px">原始密码</label>
+                            <input style="font-size: 13px" type="password" name="old_password" id="old_password" />
                         </div>
                         <div class="required field">
-                            <label>新密码</label>
-                            <input type="password" name="new_password" id="new_password">
+                            <label style="font-size: 14px">新密码</label>
+                            <input style="font-size: 13px" type="password" name="new_password" id="new_password">
                         </div>
                         <div class="required field">
-                            <label>确认新密码</label>
-                            <input type="password" name="new_password2" id="new_password2">
+                            <label style="font-size: 14px">确认新密码</label>
+                            <input style="font-size: 13px" type="password" name="new_password2" id="new_password2">
                         </div>
-                        <div id="save-password" class="ui submit teal button">确认</div>
+                        <div id="save-password" style="font-size: 15px" class="ui submit teal button">确认</div>
                     </div>
                 </form>
             </div>

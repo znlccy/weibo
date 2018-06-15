@@ -2,19 +2,19 @@
 <div class="nav">
     <div class="width_1200">
         <ul>
-            <li><a href="index.php">微博大厅</a></li>
+            <li><a href="index.php" style="font-size: 15px;">微博大厅</a></li>
             <li style="padding-right: 20px">
                 <form action="search.php" method="post">
                     <input type="text" name="keyword" placeholder="三千世界来搜一搜吧..." />
                     <button type="button" class="search"></button>
                 </form>
             </li>
-            <li style="padding-left: 10px"><a href="myCollect.php">我的收藏</a></li>
-            <li><a href="myPraise.php">我的赞</a></li>
+            <li style="padding-left: 10px"><a href="myCollect.php" style="font-size: 15px;">我的收藏</a></li>
+            <li><a href="myPraise.php" style="font-size: 15px;">我的赞</a></li>
         </ul>
         <ol>
             <li>
-                <a href="setting.php">
+                <a href="setting.php" style="font-size: 15px; ">
                     <?php echo $_SESSION['user']['username']; ?>
                 </a>
             </li>

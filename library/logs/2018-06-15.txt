@@ -1,0 +1,3 @@
+Time : 11:57:22
+SQLSTATE[42S02]: Base table or view not found: 1146 Table 'db_weibo.mr_user' doesn't exist
+Raw SQL : SELECT username FROM mr_user
