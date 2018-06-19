@@ -14,7 +14,7 @@
 
 > 项目截图
 + 登录界面
-`<img src="screenshot/login.png">`
+![Login](https://github.com/znlccy/weibo/screenshot/login.png)
 
 
 ~~~
