@@ -13,8 +13,8 @@
 * [GitHub](https://github.com/znlccy/weibo)项目存放在GitHub上的地址
 
 > 项目截图
-+ 登录界面
-![Login](https://github.com/znlccy/weibo/tree/master/screenshot/login.png)
+
+![](https://github.com/znlccy/weibo/blob/master/screenshot/login.png "登录")
 
 
 ~~~
